@@ -2,10 +2,6 @@ dist: trusty
 services:
   - docker
 
-env:
-  - DOCKER_REPO: torsocks
-  - DOCKER_TAG: latest
-
 stages:
 - build
 - test
@@ -17,7 +13,7 @@ jobs:
     - stage: build
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
-        - docker build -t ${DOCKER_REPO}:${DOCKER_TAG} .
+        - docker build . -t torsocks:latest
         - docker images
     - stage: test
       script:
