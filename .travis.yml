@@ -21,8 +21,10 @@ jobs:
     - stage: deploy
       script:
         - docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWORD"
-        - TOR_VERSION="$(tor --version | cut -d' ' -f 3)"
         - docker build . -t shpaker/torsocks:latest
+        - docker run -d -p 9050:9050 torsocks
+        - CONTAINER_ID=$(docker ps -q --filter ancestor=shpaker/torsocks)
+        - TOR_VERSION="$(docker exec ${CONTAINER_ID} tor --version | cut -d' ' -f 3)"
         - docker build . -t shpaker/torsocks:${TOR_VERSION}
         - docker images
         - docker push shpaker/torsocks
