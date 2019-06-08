@@ -1,0 +1,17 @@
+language: minimal
+
+services:
+  - docker
+
+before_install:
+  - docker build . -t torsocks
+  - docker run -d -p 9050:9050 torsocks
+  - docker ps -a
+  - sleep 10
+  - docker logs --tail all $(docker ps -q --filter ancestor=torsocks)
+
+after-install:
+  - docker stop $(docker ps -q --filter ancestor=torsocks)
+
+script:
+  - curl -v -x socks5://127.0.0.1:9050 https://checkip.amazonaws.com
