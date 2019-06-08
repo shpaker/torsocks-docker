@@ -20,7 +20,7 @@ jobs:
         - docker stop $(docker ps -q --filter ancestor=torsocks)
     - stage: deploy
       script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
-        - docker build . -t torsocks:latest
+        - docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWORD"
+        - docker build . -t shpaker/torsocks:latest
         - docker images
-        - docker push torsocks
+        - docker push shpaker/torsocks
