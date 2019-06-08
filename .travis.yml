@@ -17,10 +17,10 @@ jobs:
         - sleep 10
         - docker logs --tail all $(docker ps -q --filter ancestor=torsocks)
         - curl -v -x socks5://127.0.0.1:9050 https://checkip.amazonaws.com
+        - docker stop $(docker ps -q --filter ancestor=torsocks)
     - stage: deploy
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
         - docker build . -t torsocks:latest
         - docker images
         - docker push torsocks
-        - docker stop $(docker ps -q --filter ancestor=torsocks)
