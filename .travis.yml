@@ -3,20 +3,15 @@ services:
   - docker
 
 stages:
-- build
 - test
 - name: deploy
   if: branch = master
 
 jobs:
   include:
-    - stage: build
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
-        - docker build . -t torsocks:latest
-        - docker images
     - stage: test
       script:
+        - docker build . -t torsocks:latest
         - docker run -d -p 9050:9050 torsocks
         - docker ps -a
         - sleep 10
@@ -24,4 +19,7 @@ jobs:
         - curl -v -x socks5://127.0.0.1:9050 https://checkip.amazonaws.com
     - stage: deploy
       script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
+        - docker build . -t torsocks:latest
+        - docker images
         - docker push ${DOCKER_REPO}
