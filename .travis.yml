@@ -3,9 +3,9 @@ services:
   - docker
 
 stages:
-- test
-- name: deploy
-  if: branch = master
+  - test
+  - name: deploy
+    if: branch = master
 
 jobs:
   include:
@@ -23,3 +23,4 @@ jobs:
         - docker build . -t torsocks:latest
         - docker images
         - docker push ${DOCKER_REPO}
+        - docker stop $(docker ps -q --filter ancestor=torsocks)
