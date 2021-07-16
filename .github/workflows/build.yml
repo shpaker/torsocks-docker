@@ -30,7 +30,7 @@ jobs:
         name: Extract TOR version
         shell: bash
         run: |
-          
+          docker build . -t testing_torsocks
           docker run -d -p 9050:9050 testing_torsocks
           CONTAINER_ID=$(docker ps -q --filter ancestor=testing_torsocks)
           TOR_VERSION="$(docker exec ${CONTAINER_ID} tor --version | grep -Eo '[0-9]\.[0-9]\.[0-9]+'"
