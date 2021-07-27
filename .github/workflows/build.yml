@@ -36,7 +36,6 @@ jobs:
           TOR_VERSION="$(docker exec ${CONTAINER_ID} tor --version | sed 's/[^0-9.]*\([0-9.]*\).[0-9]*/\1/'"
           echo "##[set-output name=name;]$(echo ${GITHUB_REPOSITORY#*/})"
           echo "##[set-output name=ver;]$(echo ${TOR_VERSION})"
-          docker stop ${CONTAINER_ID}
         id: extract_name_and_version
       -
         name: Build and push
