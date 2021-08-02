@@ -34,6 +34,7 @@ jobs:
           docker run -d -p 9050:9050 testing_torsocks
           CONTAINER_ID=$(docker ps -q --filter ancestor=testing_torsocks)
           TOR_VERSION="$(docker exec ${CONTAINER_ID} tor --version | sed 's/[^0-9.]*\([0-9.]*\).[0-9]*/\1/'"
+          echo ${TOR_VERSION}
           echo "##[set-output name=name;]$(echo ${GITHUB_REPOSITORY#*/})"
           echo "##[set-output name=ver;]$(echo ${TOR_VERSION})"
         id: extract_name_and_version
